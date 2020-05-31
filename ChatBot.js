@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         ChatBot 1.11
+// @name         ChatBot 1.13
 // @namespace    http://tampermonkey.net/
-// @version      1.11
+// @version      1.13
 // @description  ChatBot! Safe Friendly Tinychat Bot to assist you in rooms.
 // @author       BadNintendo
 // @grant        none
@@ -13,9 +13,10 @@
 // @exclude     https://tinychat.com/promote/*
 // @exclude     https://tinychat.com/coins/*
 // @exclude     https://tinychat.com/gifts*
+// @namespace   https://greasyfork.org/en/scripts/404440-chatbot
 // @run-at      document-start
 // ==/UserScript==
-((ChatBot,Bot,Version) => {
+((ChatBot,Bot,CMD,Version) => {
     "use strict";
     //Compare version to pastebin often to Version #
     //Notify Box Timeout in Seconds for join/exit/kicks
@@ -30,20 +31,14 @@
         1. (Tamper Monkey Link)
         https://www.tampermonkey.net/
         2. (Create New Script)
-        https://pastebin.com/BKFpgj9f
+        https://greasyfork.org/en/scripts/404440-chatbot
         3. (Commands)
         https://pastebin.com/X2StDFh4
 
     */
     //Do not Edit below These lines unless youre able to code javascript/css/html
-    ((Version.encrypt+Version.title) == (Version.encrypt+'00b8d27c8e390f8b112cb4334d82')) ? ChatBot.version = '1.11' : alert('ChatBot cannot operate!');
-    ChatBot.css = '#notification-content{ -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; position: absolute;     top: -149px; right: 12px; width: 249px; height: 150px; opacity: 0.1; filter: alpha(opacity=10) }'+
-        '#notification-content:hover{ z-index: 888; top: -20px; -webkit-box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; -moz-box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; opacity: 1; filter: alpha(opacity=100) }'+
-        '.notifbtn{ width: 25px; position: absolute; top: 2px; right: 1px; opacity: 0.1; filter: alpha(opacity=10) }'+
-        '.notifbtn:hover,#notification-content:hover + .notifbtn{ z-index: 889; opacity: 1; filter: alpha(opacity=100) }'+
-        '#videos-header-volume,#modal,#videos-footer-submenu{z-index:999999}'+
-        '#videos-footer{ z-index: 999; }';
-    var room;
+    ((Version.encrypt+Version.title) == (Version.encrypt+'00b8d27c8e390f8b112cb4334d82')) ? ChatBot.version = '1.13' : alert('ChatBot cannot operate!');
+    var room, MainElement, ChatLogElement, VideoListElement, SideMenuElement, TitleElement, UserListElement,ModerationListElement, ChatListElement, UserContextElement, MicrophoneElement, FeaturedCSS, VideoCSS, SideMenuCSS, MainCSS, RoomCSS, TitleCSS, ContextMenuCSS,ModeratorCSS, UserListCSS, ChatListCSS, NotificationCSS, ChatboxCSS;
     ChatBot.addEventListener('DOMContentLoaded', (event) => {
         room = ChatBot.location.pathname.split("/").pop();
         if(room) Bot.title = 'Tinychat room ('+room+') / ChatBot '+ChatBot.version+'v';
@@ -53,7 +48,7 @@
         head.appendChild(style);
         style.type = 'text/css';
         if (style.styleSheet) style.styleSheet.cssText = ChatBot.css;
-        else  style.appendChild(Bot.createTextNode(ChatBot.css));
+        else style.appendChild(Bot.createTextNode(ChatBot.css));
     });
     ChatBot.alerted = () => {
         ChatLogElement.querySelector("#notification-content").style = 'z-index: 888; top: -20px; opacity: 1; filter: alpha(opacity=100)';
@@ -92,27 +87,7 @@
         mainwrapper.appendChild(wrapper);
     };
     ChatBot.DebugClear = true;
-    var MainElement, ChatLogElement, VideoListElement, SideMenuElement, TitleElement, UserListElement,ModerationListElement, ChatListElement, UserContextElement, MicrophoneElement,
-        FeaturedCSS, VideoCSS, SideMenuCSS, MainCSS, RoomCSS, TitleCSS, ContextMenuCSS,ModeratorCSS, UserListCSS, ChatListCSS, NotificationCSS, ChatboxCSS;
-    var CMD = {
-        Project: {Name: "CMD",Storage: "CMD_", isTouchScreen: false},
-        Chuck: {XHR: new XMLHttpRequest()}, Urb: {XHR: new XMLHttpRequest()}, Dad: {XHR: new XMLHttpRequest()}, Advice: {XHR: new XMLHttpRequest()},
-        YouTube: {API_KEY: youtubekey,XHR: new XMLHttpRequest(),Playing: false,MessageQueueList: [],NotPlayable: ["Private video", "Deleted video"],VideoID: undefined,Busy: false,DataReady: false,Clear: false,VideoReturn: false,SearchReturn: false,ListBuilt: true,PlayListCount: undefined,ShowQueue: false,CurrentTrack: {ID: undefined,duration: undefined,title: undefined,thumbnail: undefined}},
-        Me: [], Room: [],
-        ScriptInit: false,
-        MainBackground: undefined,
-        OGStyle: {HeightCounter: 3,WidthCounter: 1,SavedHeight: undefined,SavedWidth: undefined},NormalStyle: {ChatHide: false},FontSize: 20,ChatStyleCounter: 0,ChatHeight: 30,ChatWidth: 0,ChatDisplay: true,UserListDisplay: true,ChatStyles: undefined,MainBackgroundCounter: 0,
-        ChatLimit: 650,NotificationLimit: 100,
-        ChatScroll: true,NotificationScroll: true,NoGreet: false,Featured: true,Bot: true,AutoKick: false,AutoBan: false,GreetMode: false,PerformanceMode: false,CanTTS: false,VoteSystem: false,Popups: true,Avatar: true,Reminder: true,CanSeeGames: true,CanHostGames: false,imgur: true,Notification: true,UserYT: true,ThemeChange: true,TimeStampToggle: true,AutoMicrophone: false,GreenRoomToggle: true,PublicCommandToggle: true,
-        Game: {NoReset: false,Fish: {HighScore: ["BadNintendo", 13337],StartTimeout: undefined,RestockTimeout: undefined,ReCastTimeout: undefined,NotEnoughTimeout: undefined,Round: 0,Player: [],TypesOfFish: [["frog", 1, true],["sunfish", 2, true],["goldfish", 3, true],["fish swollowed hook", 4, false],["family of sardine", 5, true],["catfish", 6, true],["spotted bass", 7, true],["largemouth bass", 8, true],["family of shrimp", 9, true],["it pays to not drink,\ncrazy night however❛❗❜", 10, false],["cisco", 11, true],["seaweed, still edible", 12, true],["snagged a tire and lost rod", 13, false],["snagged a tire and lost hook", 14, false],["lost their rod to a shark", 15, false],["rainbow trout", 16, true],["It's your turn for dinner", 80, false],["parrot fish", 17, true],["snagged a plastic bag,\n their hook is gone", 18, false],["walleye", 19, true],["Round Whitefish", 20, true],["family of clams", 21, true],["family of oyster", 22, true],["Round blackfish", 23, true],["dolphin", 24, true],["seagull,\n not a fish but will do", 25, true],["pufferfish", 26, true],["fined for smuggling\nmore than fish", 27, false],["lobster", 28, true],["tuna", 29, true],["electric eel", 30, true],["Eel electricuted you,\nrod is toast", 31, false],["swordfish", 32, true],["had bills at home to pay", 33, false],["slipped and lost equipment", 34, false],["bike, still good too", 35, true],["great white", 36, true],["octopus", 37, true],["serpeant", 38, true],["sea turtle", 39, true],["cleaned garbage from the lake", 40, true],["fined for capturing,\n a female whale", 41, false],["male whale", 42, true],["barracuda", 43, true],["pike", 44, true],["lochiness monster", 45, true],["anglerfish", 46, true],["small treasure chest", 47, true],["golden tuna", 48, true],["family of beautiful rims", 49, true],["red snapper", 50, true],["jaws", 51, true],["mermaid", 52, true],["holy grail,\nhow'd that get there?", 75, true],["secret formula", 100, true]]}},
-        TTS: {synth: undefined,voices: undefined},
-        hasGreetedWC: false,
-        Host: 0,HostAttempt: 0,HostWaiting: false,
-        WaitToVoteList: [],UserList: [],MentionList: [],TempIgnoreList: [],IgnoreList: [],BanList: [],KickList: [],BotOPList: [],BotModList: [],TTSList: [],BanKeywordList: [],KickKeywordList: [],HighlightList: [],GreetList: [],ReminderList: [],ReminderServerInList: [],Favorited: [],SafeList: [],GreenRoomIgnoreList: [],GreenRoomList: [],WatchList: [],KBQueue: [],
-        MessageCallback: [],Message: [[]],LastMessage: new Date(),ShowedSettings: false,SendQueue: [],MissedMsg: 0, ActiveMessage: 0,
-        Camera: {List: [],Sweep: false,SweepTimer: 5,clearRandom: undefined},
-        NotificationTimeOut: [],
-    };
+    CMD.YouTube = {API_KEY: youtubekey,XHR: new XMLHttpRequest(),Playing: false,MessageQueueList: [],NotPlayable: ["Private video", "Deleted video"],VideoID: undefined,Busy: false,DataReady: false,Clear: false,VideoReturn: false,SearchReturn: false,ListBuilt: true,PlayListCount: undefined,ShowQueue: false,CurrentTrack: {ID: undefined,duration: undefined,title: undefined,thumbnail: undefined}};
     if (CMD.YouTube.API_KEY !== "") Save("YouTubeAPI", CMD.YouTube.API_KEY);
     CMD.Game.Fish.HighScore = JSON.parse(Load("FishHighScore", JSON.stringify(["BadNintendo", 13337])));
     CMD.PublicCommandToggle = JSON.parse(Load("PublicCommandToggle", JSON.stringify(true)));
@@ -154,6 +129,12 @@
     CMD.imgur = JSON.parse(Load("imgur", JSON.stringify(true)));
     CMD.Bot = JSON.parse(Load("Bot", JSON.stringify(true)));
     CheckUserTouchScreen();
+    ChatBot.css = '#notification-content{ -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; position: absolute;     top: -149px; right: 12px; width: 249px; height: 150px; opacity: 0.1; filter: alpha(opacity=10) }'+
+            '#notification-content:hover{ z-index: 888; top: -20px; -webkit-box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; -moz-box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; box-shadow: inset 0 0 6px #000000,2px -4px 6px -6px black; opacity: 1; filter: alpha(opacity=100) }'+
+            '.notifbtn{ width: 25px; position: absolute; top: 2px; right: 1px; opacity: 0.1; filter: alpha(opacity=10) }'+
+            '.notifbtn:hover,#notification-content:hover + .notifbtn{ z-index: 889; opacity: 1; filter: alpha(opacity=100) }'+
+            '#videos-header-volume,#modal,#videos-footer-submenu{z-index:999999}'+
+            '#videos-footer{ z-index: 999; }';
     if (CMD.ThemeChange) {
         FeaturedCSS = "#modal,#videos-footer-submenu{z-index:999999}#videos.column>.videos-items{background:#0000003b;height:20%}#videos.column>.videos-items+.videos-items{background:none;height:80%}#videos.row>.videos-items{background:#0000003b;width:20%}#videos.row>.videos-items+.videos-items{background:none;width:80%}#videos.row.featured-2>.videos-items{width:20%}#videos.row.featured-2>.videos-items+.videos-items{width:80%}#videos.column.featured-2>.videos-items{height:20%}#videos.column.featured-2>.videos-items+.videos-items{height:80%}#videos.row.featured-3>.videos-items{width:20%}#videos.row.featured-3>.videos-items+.videos-items{width:80%}#videos.column.featured-3>.videos-items{height:20%}#videos.column.featured-3>.videos-items+.videos-items{height:80%}";
         ChatListCSS = "#modal,#videos-footer-submenu{z-index:999999}#chatlist{background:#00000075;}.list-item>span>img{top:6px;}.list-item>span.active>span{transition:none;box-shadow:none;background:transparent;visibility:hidden;}.list-item>span>span{top:-4px;background:transparent;box-shadow:none;}.list-item>span>span[data-messages]:before{background:#53b6ef;}.list-item>span[data-status=\"gold\"]:before,.list-item>span[data-status=\"extreme\"]:before,.list-item>span[data-status=\"pro\"]:before{top:5px;}#chatlist>#header>.list-item>span.active{background:#53b6ef;}#chatlist>#header{height:60px;top:30px}#chatlist>div>span{font-weight: 600;border-radius:unset;color:#FFFFFF;height:22px;line-height:22px;}#chatlist>div{height:22px;line-height:22px;}";
@@ -488,7 +469,7 @@
         CMDRoomPrepare();
     }
 
-    function CMDRoomPrepare() {
+    var CMDRoomPrepare = () => {
         ChatBot.TinychatApp.BLL.Videolist.prototype.blurOtherVids = function() {};
         ChatBot.TinychatApp.BLL.SoundPlayer.playMessage = function() {};
         ChatBot.TinychatApp.BLL.SoundPlayer.playGift = function() {};
@@ -599,7 +580,7 @@
         Remove(ChatLogElement, "#chat-content");
         if (CMD.enablePMs === false) Remove(ChatListElement, "#chatlist");
         CMDRoomLoad();
-    }
+    };
     function CMDRoomLoad() {
         if (!CMD.ThemeChange) {
             var finishoff = false;
@@ -900,7 +881,8 @@
                 if (arguments[1].match(/^!kick\s/i)) ModCommand("kick", arguments[1]);
                 if (arguments[1].match(/^!ban\s/i)) ModCommand("ban", arguments[1]);
                 if (arguments[1].match(/^!close\s/i)) ModCommand("stream_moder_close", arguments[1]);
-                if (arguments[1].match(/^!idle\s/i)) Send("msg", "⏱ Closed for Idling or being AFK❛❗❜"),ModCommand("stream_moder_close", arguments[1]);
+                if (arguments[1].match(/^!idle\s/i)) { Send("msg", "⏱ Closed for Idling or being AFK❛❗❜"); ModCommand("stream_moder_close", arguments[1]); };
+                if (arguments[1].match(/^!cheers\s/i)) Send("msg", "🍻Cheers 💨 ❛❗❜");
             }
             if (CMD.Room.YT_ON) {
                 if (arguments[1].match(/^!play$/i)) YouTubePlayList();
@@ -2615,7 +2597,7 @@
             if (arguments[1] === false && CMD.Me.mod) Alert(0, "❛✔❜Command Accepted❛❗❜\nBot bypass was called❛❗❜");
         },
         share: function() {
-            var msg = "ChatBot ->\nInstall...\n1. (Tamper Monkey Link)\nhttps://www.tampermonkey.net/\n2. (Create New Script)\nhttps://pastebin.com/BKFpgj9f\n3. (Commands)\nhttps://pastebin.com/X2StDFh4";
+            var msg = "ChatBot ->\nInstall...\n1. (Tamper Monkey Link)\nhttps://www.tampermonkey.net/\n2. (Create New Script)\nhttps://greasyfork.org/en/scripts/404440-chatbot\n3. (Commands)\nhttps://pastebin.com/X2StDFh4";
             if (GetActiveChat() !== 0) {
                 PushPM(GetActiveChat(), msg);
                 Send("pvtmsg", msg, GetActiveChat());
@@ -2637,7 +2619,7 @@
             Alert(GetActiveChat(), "❛✔❜Command Accepted❛❗❜\n" + ((CMD.CanHostGames) ? "GAME HOSTING IS NOW ON❛❗❜" : "GAME HOSTING IS NOW OFF❛❗❜"));
         },
         version: function() {
-            var msg = "ChatBot "+ChatBot.version+"v ->\nhttps://pastebin.com/BKFpgj9f";
+            var msg = "ChatBot "+ChatBot.version+"v ->\nhttps://greasyfork.org/en/scripts/404440-chatbot";
             if (GetActiveChat() !== 0) {
                 PushPM(GetActiveChat(), msg);
                 Send("pvtmsg", msg, GetActiveChat());
@@ -3487,19 +3469,19 @@
             }, 30000, this);
         },
         pricelist: function(playerExist, item) {
-            if (item == 0) { 
+            if (item == 0) {
                 return (1000 * playerExist.Upgrades.Net * playerExist.Upgrades.Net * playerExist.Upgrades.Net);
-            } else if (item == 1) { 
+            } else if (item == 1) {
                 return (1000 * playerExist.Upgrades.Radar * 2) + 3500;
-            } else if (item == 2) { 
+            } else if (item == 2) {
                 return (playerExist.Upgrades.Store * playerExist.Upgrades.Store * 25000);
-            } else if (item == 3) { 
+            } else if (item == 3) {
                 return (20000);
-            } else if (item == 4) { 
+            } else if (item == 4) {
                 return (10000);
             } else if (item == 5) {
                 return (50000);
-            } else if (item == 6) { 
+            } else if (item == 6) {
                 return (1000);
             }
         },
@@ -3730,4 +3712,23 @@
     function Remove() {
         return (arguments[1] !== undefined) ? arguments[0].querySelector(arguments[1]).parentNode.removeChild(arguments[0].querySelector(arguments[1])) : arguments[0].parentNode.removeChild(arguments[0]);
     }
-})(window,document,{ title : '00b8d27c8e390f8b112cb4334d82', encrypt : '339a' });
+})(window,document,
+{
+    Project: {Name: "CMD",Storage: "CMD_", isTouchScreen: false},
+    Chuck: {XHR: new XMLHttpRequest()}, Urb: {XHR: new XMLHttpRequest()}, Dad: {XHR: new XMLHttpRequest()}, Advice: {XHR: new XMLHttpRequest()},
+    Me: [], Room: [],
+    ScriptInit: false,
+    MainBackground: undefined,
+    OGStyle: {HeightCounter: 3,WidthCounter: 1,SavedHeight: undefined,SavedWidth: undefined},NormalStyle: {ChatHide: false},FontSize: 20,ChatStyleCounter: 0,ChatHeight: 30,ChatWidth: 0,ChatDisplay: true,UserListDisplay: true,ChatStyles: undefined,MainBackgroundCounter: 0,
+    ChatLimit: 650,NotificationLimit: 100,
+    ChatScroll: true,NotificationScroll: true,NoGreet: false,Featured: true,Bot: true,AutoKick: false,AutoBan: false,GreetMode: false,PerformanceMode: false,CanTTS: false,VoteSystem: false,Popups: true,Avatar: true,Reminder: true,CanSeeGames: true,CanHostGames: false,imgur: true,Notification: true,UserYT: true,ThemeChange: true,TimeStampToggle: true,AutoMicrophone: false,GreenRoomToggle: true,PublicCommandToggle: true,
+    Game: {NoReset: false,Fish: {HighScore: ["BadNintendo", 13337],StartTimeout: undefined,RestockTimeout: undefined,ReCastTimeout: undefined,NotEnoughTimeout: undefined,Round: 0,Player: [],TypesOfFish: [["frog", 1, true],["sunfish", 2, true],["goldfish", 3, true],["fish swollowed hook", 4, false],["family of sardine", 5, true],["catfish", 6, true],["spotted bass", 7, true],["largemouth bass", 8, true],["family of shrimp", 9, true],["it pays to not drink,\ncrazy night however❛❗❜", 10, false],["cisco", 11, true],["seaweed, still edible", 12, true],["snagged a tire and lost rod", 13, false],["snagged a tire and lost hook", 14, false],["lost their rod to a shark", 15, false],["rainbow trout", 16, true],["It's your turn for dinner", 80, false],["parrot fish", 17, true],["snagged a plastic bag,\n their hook is gone", 18, false],["walleye", 19, true],["Round Whitefish", 20, true],["family of clams", 21, true],["family of oyster", 22, true],["Round blackfish", 23, true],["dolphin", 24, true],["seagull,\n not a fish but will do", 25, true],["pufferfish", 26, true],["fined for smuggling\nmore than fish", 27, false],["lobster", 28, true],["tuna", 29, true],["electric eel", 30, true],["Eel electricuted you,\nrod is toast", 31, false],["swordfish", 32, true],["had bills at home to pay", 33, false],["slipped and lost equipment", 34, false],["bike, still good too", 35, true],["great white", 36, true],["octopus", 37, true],["serpeant", 38, true],["sea turtle", 39, true],["cleaned garbage from the lake", 40, true],["fined for capturing,\n a female whale", 41, false],["male whale", 42, true],["barracuda", 43, true],["pike", 44, true],["lochiness monster", 45, true],["anglerfish", 46, true],["small treasure chest", 47, true],["golden tuna", 48, true],["family of beautiful rims", 49, true],["red snapper", 50, true],["jaws", 51, true],["mermaid", 52, true],["holy grail,\nhow'd that get there?", 75, true],["secret formula", 100, true]]}},
+    TTS: {synth: undefined,voices: undefined},
+    hasGreetedWC: false,
+    Host: 0,HostAttempt: 0,HostWaiting: false,
+    WaitToVoteList: [],UserList: [],MentionList: [],TempIgnoreList: [],IgnoreList: [],BanList: [],KickList: [],BotOPList: [],BotModList: [],TTSList: [],BanKeywordList: [],KickKeywordList: [],HighlightList: [],GreetList: [],ReminderList: [],ReminderServerInList: [],Favorited: [],SafeList: [],GreenRoomIgnoreList: [],GreenRoomList: [],WatchList: [],KBQueue: [],
+    MessageCallback: [],Message: [[]],LastMessage: new Date(),ShowedSettings: false,SendQueue: [],MissedMsg: 0, ActiveMessage: 0,
+    Camera: {List: [],Sweep: false,SweepTimer: 5,clearRandom: undefined},
+    NotificationTimeOut: []
+},
+{ title : '00b8d27c8e390f8b112cb4334d82', encrypt : '339a' });
