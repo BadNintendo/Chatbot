@@ -3,7 +3,7 @@ ChatBot is a browser fix and a bot made for Tinychat. Please Note this will only
 
 
 1. Create a new script on tampermonkey & clear the page by deleting all on page. Once empty move to step 2.
-2. Copy(Ctrl + C) & Paste(Ctrl + V) the code for ChatBot by replacing all on page. Move to step 3.
+2. Copy(Ctrl + C) & Paste(Ctrl + V) the code in ChatBot.js by replacing all on page. Move to step 3.
 3. Click File > Save !OR! Press Ctrl + S 
 4. Done! Enjoy now just goto tinychat and surf or join a room!
 Note: Fixes all black boxes. No junk Code. Keeps it simple!
