@@ -12,7 +12,7 @@ Commands ->
 -----------------------
 HELP:
 !help:: Command list/help
- 
+
 Owner Commands:
 !version (toggled) :: Gets the version of CMD off users
 !closeall (toggled) :: Every camera but your own will close
@@ -55,12 +55,12 @@ Moderator Commands:
 !modlistclear (toggled) :: Clear jr. moderator list
 !modadd (user) :: Add user to jr. moderator list or -all to allow all
 !modremove (# from modlist) :: Remove user from jr. moderator list
- 
+
 Jr. Moderator Commands:
 !kick (user | nick) :: Kicks user of lesser authority
 !ban (user | nick) :: bans user of lesser authority
 !close (user | nick) :: close user of lesser authority
- 
+
 User Commands:
 !remindertoggle (toggled) :: Reminders OFF|ON
 !yt (link | keyword) :: Request YouTube track
@@ -119,7 +119,7 @@ User Commands:
 !clr (toggled) :: Clear ALL chat
 !settings (toggled) :: Reveal settings
 !share (toggled) :: Share CTS with users fast
- 
+
 Game Commands:
 !fish (joins if verified by bot) :: joins game if verified by the bot and their gamehost is enabled
 !gameview (toggled) :: Toggle in chat game notifications OFF|ON
